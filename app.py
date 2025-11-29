@@ -374,14 +374,18 @@ def main():
             st.session_state.example_query = "Bagaimana cara menghubungi Bank Indonesia?"
     
     # User input
-    user_input = st.text_input("Ketik pertanyaan Anda tentang Bank Indonesia...", key="user_input")
+    user_input = st.text_input("Ketik pertanyaan Anda tentang Bank Indonesia...", key="user_input_field", value="")
+    
+    # Submit button
+    submit_button = st.button("📤 Kirim")
     
     # Handle example query
     if 'example_query' in st.session_state:
         user_input = st.session_state.example_query
         del st.session_state.example_query
+        submit_button = True  # Auto submit
     
-    if user_input:
+    if submit_button and user_input:
         if not st.session_state.api_key:
             st.error("⚠️ Silakan masukkan API Key di sidebar terlebih dahulu!")
             return
