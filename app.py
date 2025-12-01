@@ -4,6 +4,14 @@ import re
 from datetime import datetime
 from PyPDF2 import PdfReader
 import requests
+import numpy as np
+from sentence_transformers import SentenceTransformer
+
+# Load embedding model (cached)
+@st.cache_resource
+def load_embedding_model():
+    """Load sentence transformer model for semantic search"""
+    return SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 # Page config
 st.set_page_config(
@@ -82,61 +90,72 @@ def chunk_text(text, chunk_size=1000, overlap=200):
     
     return chunks
 
-def create_embedding_features(text):
-    """Create simple embedding features for retrieval"""
+def create_embedding_features(text, model=None):
+    """Create embedding vector for semantic search"""
     words = text.lower().split()
-    return {
+    features = {
         'text': text,
         'words': set(words),
         'length': len(text),
         'keywords': [w for w in words if len(w) > 4][:30]
     }
+    
+    # Add semantic embedding if model is provided
+    if model is not None:
+        try:
+            features['embedding'] = model.encode(text, convert_to_numpy=True)
+        except:
+            features['embedding'] = None
+    
+    return features
 
-def find_relevant_chunks(query, documents, top_k=3):
-    """Find most relevant document chunks with improved matching"""
+def cosine_similarity(vec1, vec2):
+    """Calculate cosine similarity between two vectors"""
+    if vec1 is None or vec2 is None:
+        return 0.0
+    dot_product = np.dot(vec1, vec2)
+    norm1 = np.linalg.norm(vec1)
+    norm2 = np.linalg.norm(vec2)
+    if norm1 == 0 or norm2 == 0:
+        return 0.0
+    return dot_product / (norm1 * norm2)
+
+def find_relevant_chunks(query, documents, model=None, top_k=5):
+    """Find most relevant document chunks using semantic search"""
     if not documents:
         return []
     
     query_lower = query.lower()
-    query_words = set(query_lower.split())
     
-    # Extract potential acronyms (all caps words or words in parentheses)
-    import re
-    acronyms = re.findall(r'\b[A-Z]{2,}\b', query)
+    # Generate query embedding for semantic search
+    query_embedding = None
+    if model is not None:
+        try:
+            query_embedding = model.encode(query, convert_to_numpy=True)
+        except:
+            pass
     
     scored_docs = []
     for doc in documents:
-        score = 0
+        score = 0.0
+        
+        # SEMANTIC SIMILARITY (Primary scoring method)
+        if query_embedding is not None and doc['features'].get('embedding') is not None:
+            semantic_score = cosine_similarity(query_embedding, doc['features']['embedding'])
+            score += semantic_score * 100  # Scale to 0-100
+        
+        # KEYWORD MATCHING (Fallback/boost)
         doc_text = doc['chunk'].lower()
+        query_words = set(query_lower.split())
         doc_words = doc['features']['words']
         
-        # Boost score for acronym matches
-        for acronym in acronyms:
-            # Check if acronym appears in doc
-            if acronym.lower() in doc_text:
-                score += 10
-            # Check for pattern like "Rapat Dewan Gubernur (RDG)"
-            if f"({acronym.lower()})" in doc_text or f"({acronym})" in doc['chunk']:
-                score += 15
-        
-        # Word overlap score
+        # Word overlap
         overlap = query_words.intersection(doc_words)
         score += len(overlap) * 2
         
-        # Exact phrase match (very important)
+        # Exact phrase match
         if len(query) > 3 and query_lower in doc_text:
-            score += 20
-        
-        # Keyword match
-        for keyword in doc['features']['keywords']:
-            if keyword in query_lower:
-                score += 3
-        
-        # Partial word matching for longer queries
-        for word in query_words:
-            if len(word) > 3:
-                if word in doc_text:
-                    score += 1
+            score += 10
         
         if score > 0:
             scored_docs.append({
@@ -155,8 +174,8 @@ def extract_text_from_pdf(pdf_file):
         text += page.extract_text()
     return text
 
-def process_document(file, filename):
-    """Process uploaded document"""
+def process_document(file, filename, model=None):
+    """Process uploaded document with semantic embeddings"""
     try:
         if filename.endswith('.pdf'):
             text = extract_text_from_pdf(file)
@@ -169,14 +188,14 @@ def process_document(file, filename):
         # Chunk text
         chunks = chunk_text(text)
         
-        # Create document entries
+        # Create document entries with embeddings
         docs = []
         for i, chunk in enumerate(chunks):
             docs.append({
                 'id': f"{filename}_{i}",
                 'filename': filename,
                 'chunk': chunk,
-                'features': create_embedding_features(chunk),
+                'features': create_embedding_features(chunk, model),
                 'index': i,
                 'total_chunks': len(chunks)
             })
@@ -271,6 +290,14 @@ Instruksi:
 
 # Main App
 def main():
+    # Load embedding model
+    try:
+        embedding_model = load_embedding_model()
+        model_loaded = True
+    except Exception as e:
+        st.warning(f"⚠️ Semantic search tidak tersedia: {str(e)}\nMenggunakan keyword search sebagai fallback.")
+        embedding_model = None
+        model_loaded = False
     # Header
     st.markdown("""
     <div class="main-header">
@@ -303,7 +330,10 @@ def main():
         
         # Document upload
         st.header("📄 Upload Dokumen")
-        st.caption(f"Dokumen tersimpan: {len(st.session_state.documents)}")
+        if model_loaded:
+            st.caption(f"🔍 Semantic search: ✅ Aktif | Dokumen: {len(st.session_state.documents)}")
+        else:
+            st.caption(f"📚 Dokumen tersimpan: {len(st.session_state.documents)}")
         
         uploaded_file = st.file_uploader(
             "Upload PDF atau TXT",
@@ -313,8 +343,8 @@ def main():
         )
         
         if uploaded_file and uploaded_file.name not in [doc.get('source_file', '') for doc in st.session_state.get('uploaded_files', [])]:
-            with st.spinner("⏳ Memproses dokumen..."):
-                docs, error = process_document(uploaded_file, uploaded_file.name)
+            with st.spinner("⏳ Memproses dokumen & membuat embeddings..."):
+                docs, error = process_document(uploaded_file, uploaded_file.name, embedding_model)
                 
                 if error:
                     st.error(f"❌ Error: {error}")
@@ -330,7 +360,7 @@ def main():
                     })
                     
                     st.success(f"✅ Berhasil! {len(docs)} bagian dokumen ditambahkan")
-                    # Jangan rerun otomatis, biarkan user continue
+                    st.rerun()
         
         if st.session_state.documents:
             st.info(f"📚 {len(set([d['filename'] for d in st.session_state.documents]))} file terproses")
@@ -338,7 +368,7 @@ def main():
                 st.session_state.documents = []
                 st.session_state.uploaded_files = []
                 st.success("✅ Semua dokumen dihapus")
-                st.experimental_rerun()
+                st.rerun()
         
         st.markdown("---")
         
@@ -349,6 +379,11 @@ def main():
         1. Masukkan API Key (gratis)
         2. Upload dokumen BI (opsional)
         3. Mulai bertanya!
+        
+        **Teknologi:**
+        - 🤖 Gemini 2.5 Flash AI
+        - 🔍 Semantic Search (sentence-transformers)
+        - 📄 RAG (Retrieval-Augmented Generation)
         
         **Download Dokumen BI:**
         - [Publikasi BI](https://www.bi.go.id/id/publikasi)
@@ -437,11 +472,12 @@ def main():
             'content': user_input
         })
         
-        # Find relevant documents
+        # Find relevant documents with semantic search
         relevant_docs = find_relevant_chunks(
             user_input,
             st.session_state.documents,
-            top_k=3
+            model=embedding_model,
+            top_k=5
         )
         
         # Get AI response
@@ -460,7 +496,7 @@ def main():
             'id': datetime.now().isoformat()
         })
         
-        st.experimental_rerun()
+        st.rerun()
 
 if __name__ == "__main__":
     main()
