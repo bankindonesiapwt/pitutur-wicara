@@ -561,17 +561,20 @@ def main():
     
     # Example questions
     st.subheader("💡 Contoh Pertanyaan:")
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     with col1:
-        if st.button("📍 Alamat KPw BI Purwokerto"):
-            st.session_state.example_query = "Dimana alamat Kantor Perwakilan Bank Indonesia Purwokerto?"
+        if st.button("🏛️ Tentang Bank Indonesia"):
+            st.session_state.example_query = "Apa itu Bank Indonesia?"
+        if st.button("📍 Informasi Kantor Perwakilan Bank Indonesia Purwokerto"):
+            st.session_state.example_query = "Informasi Kantor Perwakilan Bank Indonesia Purwokerto"
+        if st.button("💼 Layanan yang tersedia di Bank Indonesia Purwokerto"):
+            st.session_state.example_query = "Layanan apa saja yang tersedia di Bank Indonesia Purwokerto?"
     with col2:
-        if st.button("💰 Cara Penukaran Uang"):
-            st.session_state.example_query = "Bagaimana cara menukar uang di Bank Indonesia Purwokerto?"
-    with col3:
-        if st.button("🎓 Info Magang & PKL"):
+        if st.button("🎓 Magang dan PKL"):
             st.session_state.example_query = "Bagaimana cara mendaftar magang atau PKL di Bank Indonesia Purwokerto?"
+        if st.button("📢 Survei, Pengaduan, dan Informasi Publik"):
+            st.session_state.example_query = "Bagaimana cara menyampaikan pengaduan atau mengakses informasi publik?"
     
     # User input
     user_input = st.text_input("Ketik pertanyaan Anda tentang Bank Indonesia...", key="user_input_field", value="")
