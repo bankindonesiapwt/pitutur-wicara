@@ -73,7 +73,7 @@ if 'messages' not in st.session_state:
 if 'documents' not in st.session_state:
     st.session_state.documents = []
 if 'api_key' not in st.session_state:
-    st.session_state.api_key = ''
+    st.session_state.api_key = 'AIzaSyD7_PAF98KwkGPGSHLWPmBF1GsXDAyxEA8'
 
 # Functions
 def chunk_text(text, chunk_size=1000, overlap=200):
@@ -312,19 +312,9 @@ def main():
     with st.sidebar:
         st.header("⚙️ Pengaturan")
         
-        # API Key input
-        api_key = st.text_input(
-            "Google Gemini API Key",
-            value=st.session_state.api_key,
-            type="password",
-            help="Dapatkan API key gratis di https://ai.google.dev"
-        )
-        
-        if api_key:
-            st.session_state.api_key = api_key
-            st.success("✅ API Key tersimpan!")
-        else:
-            st.warning("⚠️ Masukkan API Key terlebih dahulu")
+        # API Key is pre-configured
+        api_key = st.session_state.api_key
+        st.success("✅ API Key siap digunakan!")
         
         st.markdown("---")
         
