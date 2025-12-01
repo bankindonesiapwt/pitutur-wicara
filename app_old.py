@@ -96,6 +96,11 @@ st.markdown("""
             font-size: 0.9rem;
         }
     }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background: #f0f2f5;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -424,6 +429,44 @@ def find_relevant_chunks(query, documents, model=None, top_k=5):
     scored_docs.sort(key=lambda x: x['score'], reverse=True)
     return [item['doc'] for item in scored_docs[:top_k]]
 
+def extract_text_from_pdf(pdf_file):
+    """Extract text from PDF file"""
+    pdf_reader = PdfReader(pdf_file)
+    text = ""
+    for page in pdf_reader.pages:
+        text += page.extract_text()
+    return text
+
+def process_document(file, filename, model=None):
+    """Process uploaded document with semantic embeddings"""
+    try:
+        if filename.endswith('.pdf'):
+            text = extract_text_from_pdf(file)
+        else:
+            text = file.read().decode('utf-8')
+        
+        # Clean text
+        text = re.sub(r'\s+', ' ', text).strip()
+        
+        # Chunk text
+        chunks = chunk_text(text)
+        
+        # Create document entries with embeddings
+        docs = []
+        for i, chunk in enumerate(chunks):
+            docs.append({
+                'id': f"{filename}_{i}",
+                'filename': filename,
+                'chunk': chunk,
+                'features': create_embedding_features(chunk, model),
+                'index': i,
+                'total_chunks': len(chunks)
+            })
+        
+        return docs, None
+    except Exception as e:
+        return None, str(e)
+
 def chat_with_ai(user_message, relevant_docs, api_key):
     """Send message to Gemini AI using REST API"""
     try:
@@ -462,14 +505,15 @@ Instruksi:
 - Jawab berdasarkan pengetahuan umum tentang Bank Indonesia
 - Berikan informasi yang akurat dan bermanfaat
 - Sertakan link ke website resmi bi.go.id untuk informasi lebih lanjut
+- Sarankan user untuk mengupload dokumen resmi BI untuk informasi lebih detail
 - Jawab dalam Bahasa Indonesia dengan ramah dan profesional"""
         
-        # Call Gemini API using REST
+        # Call Gemini API using REST - Gunakan model terbaru yang tersedia
         models_to_try = [
-            "gemini-2.5-flash",
-            "gemini-2.0-flash",
-            "gemini-2.5-flash-lite",
-            "gemini-2.0-flash-lite",
+            "gemini-2.5-flash",           # Terbaru & tercepat
+            "gemini-2.0-flash",           # Alternatif 1
+            "gemini-2.5-flash-lite",      # Alternatif 2
+            "gemini-2.0-flash-lite",      # Alternatif 3
         ]
         
         last_error = None
@@ -499,12 +543,13 @@ Instruksi:
                         return text, relevant_docs
                 else:
                     last_error = response.json() if response.content else "Unknown error"
-                    continue
+                    continue  # Try next model
             except Exception as e:
                 last_error = str(e)
-                continue
+                continue  # Try next model
         
-        return f"❌ Tidak ada model yang berhasil. Last error: {last_error}", None
+        # Jika semua model gagal
+        return f"❌ Tidak ada model yang berhasil. Last error: {last_error}\n\nSilakan jalankan check_models.py untuk cek model yang tersedia.", None
     
     except Exception as e:
         return f"❌ Error: {str(e)}", None
@@ -516,7 +561,7 @@ def main():
         embedding_model = load_embedding_model()
         model_loaded = True
     except Exception as e:
-        st.warning(f"⚠️ Semantic search tidak tersedia: {str(e)}")
+        st.warning(f"⚠️ Semantic search tidak tersedia: {str(e)}\nMenggunakan keyword search sebagai fallback.")
         embedding_model = None
         model_loaded = False
     
@@ -534,8 +579,78 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
-    # Set API key
-    api_key = st.session_state.api_key
+    # Sidebar
+    with st.sidebar:
+        st.header("⚙️ Pengaturan")
+        
+        # API Key is pre-configured
+        api_key = st.session_state.api_key
+        st.success("✅ API Key siap digunakan!")
+        
+        st.markdown("---")
+        
+        # Document upload
+        st.header("� Upload Dokumen")
+        if model_loaded:
+            st.caption(f"� Semantic search: ✅ Aktif | Dokumen: {len(st.session_state.documents)}")
+        else:
+            st.caption(f"� Dokumen tersimpan: {len(st.session_state.documents)}")
+        
+        uploaded_file = st.file_uploader(
+            "Upload PDF atau TXT",
+            type=['pdf', 'txt'],
+            help="Upload dokumen resmi Bank Indonesia",
+            key="file_uploader"
+        )
+        
+        if uploaded_file and uploaded_file.name not in [doc.get('source_file', '') for doc in st.session_state.get('uploaded_files', [])]:
+            with st.spinner("⏳ Memproses dokumen & membuat embeddings..."):
+                docs, error = process_document(uploaded_file, uploaded_file.name, embedding_model)
+                
+                if error:
+                    st.error(f"❌ Error: {error}")
+                else:
+                    st.session_state.documents.extend(docs)
+                    
+                    # Track uploaded files
+                    if 'uploaded_files' not in st.session_state:
+                        st.session_state.uploaded_files = []
+                    st.session_state.uploaded_files.append({
+                        'source_file': uploaded_file.name,
+                        'timestamp': datetime.now().isoformat()
+                    })
+                    
+                    st.success(f"✅ Berhasil! {len(docs)} bagian dokumen ditambahkan")
+                    st.rerun()
+        
+        if st.session_state.documents:
+            st.info(f"📚 {len(set([d['filename'] for d in st.session_state.documents]))} file terproses")
+            if st.button("🗑️ Hapus Semua Dokumen"):
+                st.session_state.documents = []
+                st.session_state.uploaded_files = []
+                st.success("✅ Semua dokumen dihapus")
+                st.rerun()
+        
+        st.markdown("---")
+        
+        # Info
+        st.header("ℹ️ Informasi")
+        st.markdown("""
+        **Cara Pakai:**
+        1. Masukkan API Key (gratis)
+        2. Upload dokumen BI (opsional)
+        3. Mulai bertanya!
+        
+        **Teknologi:**
+        - 🤖 Gemini 2.5 Flash AI
+        - 🔍 Semantic Search (sentence-transformers)
+        - 📄 RAG (Retrieval-Augmented Generation)
+        
+        **Download Dokumen BI:**
+        - [Publikasi BI](https://www.bi.go.id/id/publikasi)
+        - [Statistik BI](https://www.bi.go.id/id/statistik)
+        - [Laporan BI](https://www.bi.go.id/id/publikasi/laporan)
+        """)
     
     # Display chat messages
     chat_container = st.container()
@@ -555,6 +670,21 @@ def main():
                     {message['content']}
                 </div>
                 """, unsafe_allow_html=True)
+                
+                if message.get('sources'):
+                    with st.expander("� Lihat Sumber Dokumen"):
+                        for i, source in enumerate(message['sources']):
+                            st.markdown(f"""
+                            **{i+1}. {source['filename']}**  
+                            Bagian {source['index']+1} dari {source['total_chunks']}
+                            """)
+                            st.text_area(
+                                "Preview:",
+                                source['chunk'][:300] + "...",
+                                height=100,
+                                key=f"source_{message.get('id', '')}_{i}",
+                                disabled=True
+                            )
     
     # Chat input
     st.markdown("---")
@@ -583,9 +713,13 @@ def main():
     if 'example_query' in st.session_state:
         user_input = st.session_state.example_query
         del st.session_state.example_query
-        submit_button = True
+        submit_button = True  # Auto submit
     
     if submit_button and user_input:
+        if not st.session_state.api_key:
+            st.error("⚠️ Silakan masukkan API Key di sidebar terlebih dahulu!")
+            return
+        
         # Add user message
         st.session_state.messages.append({
             'role': 'user',
