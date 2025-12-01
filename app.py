@@ -20,49 +20,80 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS - Light Theme
+# Custom CSS - WhatsApp-style Mobile-Friendly Theme
 st.markdown("""
 <style>
+    /* Hide Streamlit default elements */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    
     .stApp {
-        background: #f5f7fa;
+        background: #efeae2;
+        max-width: 100%;
     }
-    .main-header {
-        background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        margin-bottom: 2rem;
-        color: white;
+    
+    /* Sticky Header - WhatsApp Style */
+    .wa-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        background: #2563eb;
+        padding: 0.75rem 1rem;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin: 0;
     }
-    .main-header h1 {
+    
+    /* Add padding to main content to prevent overlap with fixed header */
+    .block-container {
+        padding-top: 3.5rem !important;
+    }
+    .wa-header h3 {
         color: white !important;
+        margin: 0 !important;
+        font-size: 1.1rem !important;
+        font-weight: 500 !important;
     }
-    .main-header p {
-        color: #e0e7ff !important;
-    }
+    
+    /* Chat messages - WhatsApp Style */
     .chat-message {
-        padding: 1.5rem;
-        border-radius: 10px;
-        margin-bottom: 1rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 0.6rem 0.8rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        max-width: 80%;
+        word-wrap: break-word;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        font-size: 0.95rem;
+        line-height: 1.4;
     }
     .user-message {
-        background: #2563eb;
-        color: white;
-        margin-left: 20%;
+        background: #dbeafe;
+        color: #000;
+        margin-left: auto;
+        margin-right: 0;
+        border-radius: 8px 0 8px 8px;
     }
     .assistant-message {
         background: white;
-        color: #1f2937;
-        margin-right: 20%;
-        border: 1px solid #e5e7eb;
+        color: #000;
+        margin-right: auto;
+        margin-left: 0;
+        border-radius: 0 8px 8px 8px;
     }
-    .source-box {
-        background: #eff6ff;
-        padding: 1rem;
-        border-radius: 8px;
-        border-left: 4px solid #2563eb;
-        margin-top: 1rem;
+    
+    /* Mobile optimization */
+    @media (max-width: 768px) {
+        .chat-message {
+            max-width: 85%;
+            font-size: 0.9rem;
+        }
+    }
+    
+    /* Sidebar styling */
+    [data-testid="stSidebar"] {
+        background: #f0f2f5;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -298,13 +329,10 @@ def main():
         st.warning(f"⚠️ Semantic search tidak tersedia: {str(e)}\nMenggunakan keyword search sebagai fallback.")
         embedding_model = None
         model_loaded = False
-    # Header
+    # WhatsApp-style Sticky Header
     st.markdown("""
-    <div class="main-header">
-        <h1>🏦 Bank Indonesia Chatbot</h1>
-        <p style="color: #e0e7ff; margin-top: 0.5rem;">
-            Asisten pintar untuk menjawab pertanyaan tentang Bank Indonesia dengan data valid dan akurat
-        </p>
+    <div class="wa-header">
+        <h3>🏦 Bank Indonesia Chatbot</h3>
     </div>
     """, unsafe_allow_html=True)
     
@@ -319,11 +347,11 @@ def main():
         st.markdown("---")
         
         # Document upload
-        st.header("📄 Upload Dokumen")
+        st.header("� Upload Dokumen")
         if model_loaded:
-            st.caption(f"🔍 Semantic search: ✅ Aktif | Dokumen: {len(st.session_state.documents)}")
+            st.caption(f"� Semantic search: ✅ Aktif | Dokumen: {len(st.session_state.documents)}")
         else:
-            st.caption(f"📚 Dokumen tersimpan: {len(st.session_state.documents)}")
+            st.caption(f"� Dokumen tersimpan: {len(st.session_state.documents)}")
         
         uploaded_file = st.file_uploader(
             "Upload PDF atau TXT",
@@ -381,13 +409,6 @@ def main():
         - [Laporan BI](https://www.bi.go.id/id/publikasi/laporan)
         """)
     
-    # Main chat area
-    col1, col2 = st.columns([3, 1])
-    
-    with col2:
-        st.metric("💬 Total Pesan", len(st.session_state.messages))
-        st.metric("📚 Dokumen", len(st.session_state.documents))
-    
     # Display chat messages
     chat_container = st.container()
     with chat_container:
@@ -408,7 +429,7 @@ def main():
                 """, unsafe_allow_html=True)
                 
                 if message.get('sources'):
-                    with st.expander("📄 Lihat Sumber Dokumen"):
+                    with st.expander("� Lihat Sumber Dokumen"):
                         for i, source in enumerate(message['sources']):
                             st.markdown(f"""
                             **{i+1}. {source['filename']}**  
