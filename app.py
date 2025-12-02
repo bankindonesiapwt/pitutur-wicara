@@ -345,9 +345,15 @@ if 'messages' not in st.session_state:
 if 'documents' not in st.session_state:
     st.session_state.documents = []
 if 'api_key' not in st.session_state:
-    st.session_state.api_key = 'AIzaSyD7_PAF98KwkGPGSHLWPmBF1GsXDAyxEA8'
+    # Load API key from Streamlit secrets or environment variable
+    try:
+        st.session_state.api_key = st.secrets.get("GEMINI_API_KEY", "")
+    except:
+        st.session_state.api_key = os.getenv("GEMINI_API_KEY", "")
 if 'builtin_loaded' not in st.session_state:
     st.session_state.builtin_loaded = False
+if 'sidebar_open' not in st.session_state:
+    st.session_state.sidebar_open = False
 
 # Functions
 def load_builtin_knowledge(model=None):
@@ -592,6 +598,12 @@ def main():
     
     # Chat input
     st.markdown("---")
+    
+    # Check if API key is configured
+    if not st.session_state.api_key:
+        st.error("⚠️ API key tidak dikonfigurasi. Silakan hubungi administrator.")
+        st.info("Administrator: Tambahkan GEMINI_API_KEY di Streamlit Secrets atau environment variable.")
+        return
     
     # Example questions
     st.subheader("💡 Contoh Pertanyaan:")
