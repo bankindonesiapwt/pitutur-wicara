@@ -15,7 +15,7 @@ def load_embedding_model():
 
 # Page config
 st.set_page_config(
-    page_title="KPw BI Purwokerto Chatbot",
+    page_title="LISA Chatbot - KPw BI Purwokerto",
     page_icon="https://www.bi.go.id/favicon.png",
     layout="wide"
 )
@@ -94,6 +94,11 @@ st.markdown("""
         .chat-message {
             max-width: 85%;
             font-size: 0.9rem;
+        }
+        
+        /* Button text alignment on mobile */
+        button[kind="secondary"] p {
+            text-align: left !important;
         }
     }
 </style>
@@ -530,7 +535,10 @@ def main():
     st.markdown("""
     <div class="wa-header">
         <img src="https://images.seeklogo.com/logo-png/62/2/bank-indonesia-logo-png_seeklogo-622136.png" alt="Bank Indonesia Logo" style="height:32px; vertical-align: middle; margin-right: 10px;"/>
-        <h3>KPw BI Purwokerto Chatbot</h3>
+        <div>
+            <h3>LISA Chatbot</h3>
+            <h4 style="font-size:0.9rem; color:white; margin-top:-24px; font-style: italic; font-weight: normal;">KPw BI Purwokerto</h4>
+        </div>
     </div>
     """, unsafe_allow_html=True)
     
