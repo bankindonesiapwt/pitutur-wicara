@@ -8,7 +8,7 @@ import hashlib
 
 # Page config
 st.set_page_config(
-    page_title="Admin Dashboard - LISA Chatbot",
+    page_title="Admin Dashboard - PITUTUR-Wicara",
     page_icon="🔧",
     layout="wide"
 )
@@ -183,7 +183,7 @@ def main():
     authenticate()
     
     if not st.session_state.authenticated:
-        st.title("🔐 Admin Dashboard - LISA Chatbot")
+        st.title("🔐 Admin Dashboard - PITUTUR-Wicara")
         st.info("Silakan login untuk mengakses admin dashboard")
         return
     

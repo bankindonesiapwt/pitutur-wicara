@@ -16,7 +16,7 @@ API key yang sebelumnya hardcoded sudah **leaked** dan **diblokir** oleh Google.
 ### 2. Configure in Streamlit Cloud (PRODUCTION)
 
 1. Buka Streamlit Cloud dashboard
-2. Pilih app **lisa-bi-purwokerto**
+2. Pilih app **pitutur-wicara-purwokerto**
 3. Klik **"Settings"** (⚙️)
 4. Pilih **"Secrets"**
 5. Tambahkan:

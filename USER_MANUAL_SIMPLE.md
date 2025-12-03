@@ -1,8 +1,12 @@
-# 📱 Panduan LISA Chatbot - Bank Indonesia Purwokerto
+# 📱 Panduan PITUTUR-Wicara - Bank Indonesia Purwokerto
 
-## 🎯 Apa itu LISA?
+## 🎯 Apa itu PITUTUR-Wicara?
 
-**LISA (Layanan Informasi Serba Ada)** adalah chatbot pintar yang bisa menjawab pertanyaan seputar Bank Indonesia Purwokerto. Seperti WhatsApp, tapi khusus untuk informasi BI!
+**PITUTUR-Wicara** adalah chatbot pintar yang bisa menjawab pertanyaan seputar Bank Indonesia Purwokerto. Seperti WhatsApp, tapi khusus untuk informasi BI!
+
+**Kepanjangan:**
+- **PITUTUR** = Pelayanan Informasi Publik Sepenuh Hati dan Transparan
+- **Wicara** = Wadah Informasi Cepat dan Akurat
 
 ---
 
@@ -24,7 +28,7 @@
 #### 3️⃣ Mulai Chat!
 - Ketik pertanyaan Anda di kotak chat
 - Tekan Enter atau klik tombol kirim
-- LISA akan jawab dalam beberapa detik
+- PITUTUR-Wicara akan jawab dalam beberapa detik
 
 ### ❓ Contoh Pertanyaan yang Bisa Ditanya:
 
@@ -147,7 +151,7 @@ Kalau ada masalah atau pertanyaan:
 **Untuk User Biasa:**
 - [ ] Buka link chatbot
 - [ ] Coba klik contoh pertanyaan
-- [ ] Chat dengan LISA
+- [ ] Chat dengan PITUTUR-Wicara
 - [ ] Sudah dapat jawaban yang dibutuhkan
 
 **Untuk Admin:**
@@ -169,5 +173,5 @@ Ada pertanyaan? Jangan ragu untuk bertanya! 😊
 
 ---
 
-*Panduan Sederhana LISA Chatbot - Bank Indonesia Purwokerto*
-*Update: 2 Desember 2025*
+*Panduan Sederhana PITUTUR-Wicara - Bank Indonesia Purwokerto*
+*Update: 3 Desember 2025*

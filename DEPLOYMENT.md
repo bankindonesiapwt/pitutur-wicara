@@ -34,7 +34,7 @@ git push origin main
 3. Select repository: `send0moka/bi-chatbot`
 4. Branch: `main`
 5. Main file path: `app.py`
-6. App URL: Choose your custom URL (e.g., `lisa-bi-purwokerto`)
+6. App URL: Choose your custom URL (e.g., `pitutur-wicara-purwokerto`)
 7. Click "Deploy"
 
 **Your chatbot will be live at:**
@@ -47,7 +47,7 @@ git push origin main
 3. Select repository: `send0moka/bi-chatbot`
 4. Branch: `main`
 5. Main file path: `admin_dashboard.py`
-6. App URL: Choose URL (e.g., `lisa-admin-purwokerto`)
+6. App URL: Choose URL (e.g., `pitutur-admin-purwokerto`)
 7. Click "Deploy"
 
 **Admin dashboard will be live at:**
@@ -130,7 +130,7 @@ If something goes wrong:
 
 ## Custom Domain (Optional)
 
-To use custom domain (e.g., lisa.bi.purwokerto.id):
+To use custom domain (e.g., pitutur.bi.purwokerto.id):
 1. Upgrade to Streamlit Cloud Team/Enterprise
 2. Configure CNAME in DNS settings
 3. Follow Streamlit documentation

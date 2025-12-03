@@ -1,4 +1,4 @@
-# 🏦 LISA Chatbot - Bank Indonesia Purwokerto
+# 🏦 PITUTUR-Wicara - Bank Indonesia Purwokerto
 
 <div align="center">
   
@@ -7,7 +7,10 @@
 ![Google Gemini](https://img.shields.io/badge/Google%20Gemini%202.5-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
-**LISA (Layanan Informasi Serba Ada)** - Chatbot AI untuk Kantor Perwakilan Bank Indonesia Purwokerto dengan Knowledge Base Management System yang lengkap.
+**PITUTUR-Wicara** - Chatbot AI untuk Kantor Perwakilan Bank Indonesia Purwokerto dengan Knowledge Base Management System yang lengkap.
+
+- **PITUTUR** = Pelayanan Informasi Publik Sepenuh Hati dan Transparan
+- **Wicara** = Wadah Informasi Cepat dan Akurat
 
 [🚀 Live Demo](#) • [📖 Dokumentasi](#-dokumentasi) • [🛠️ Instalasi](#-instalasi-dan-deployment)
 
@@ -229,7 +232,7 @@ bi-chatbot/
 
 1. **Buka chatbot** - URL production atau localhost:8501
 2. **Lihat example questions** - Button di bawah chat input
-3. **Chat dengan LISA** - Tanya tentang BI Purwokerto
+3. **Chat dengan PITUTUR-Wicara** - Tanya tentang BI Purwokerto
 4. **Mobile-friendly** - Gunakan di HP untuk WhatsApp-like experience
 
 ### Knowledge Base Update
@@ -420,7 +423,7 @@ Jika project ini bermanfaat, kasih ⭐ di GitHub!
 
 <div align="center">
 
-**[⬆ Kembali ke atas](#-lisa-chatbot---bank-indonesia-purwokerto)**
+**[⬆ Kembali ke atas](#-pitutur-wicara---bank-indonesia-purwokerto)**
 
 Made with ❤️ using Streamlit & Google Gemini
 

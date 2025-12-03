@@ -43,7 +43,7 @@ Jalan M.H. Thamrin No. 2, Jakarta 10350
 Contact Center Bank Indonesia Bicara
 Telp: 131 dan 1500131 (dari luar negeri)
 E-mail: bicara@bi.go.id
-Chatbot LISA: 081 131 131 131
+Chatbot PITUTUR-Wicara: 081 131 131 131
 
 ===============================================
 2. INFORMASI KANTOR PERWAKILAN BANK INDONESIA PURWOKERTO
