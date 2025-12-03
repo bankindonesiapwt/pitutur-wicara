@@ -1,7 +1,7 @@
 # Deployment Configuration for Streamlit Cloud
 
 ## Prerequisites
-- GitHub repository (already created: send0moka/bi-chatbot)
+- GitHub repository (already created: bankindonesiapwt/pitutur-wicara)
 - Streamlit Cloud account (https://streamlit.io/cloud)
 - Admin password configured in secrets (see step 4)
 
@@ -31,7 +31,7 @@ git push origin main
 
 1. Go to https://share.streamlit.io/
 2. Click "New app"
-3. Select repository: `send0moka/bi-chatbot`
+3. Select repository: `bankindonesiapwt/pitutur-wicara`
 4. Branch: `main`
 5. Main file path: `app.py`
 6. App URL: Choose your custom URL (e.g., `pitutur-wicara-purwokerto`)
@@ -44,7 +44,7 @@ git push origin main
 
 1. Go to https://share.streamlit.io/
 2. Click "New app"
-3. Select repository: `send0moka/bi-chatbot`
+3. Select repository: `bankindonesiapwt/pitutur-wicara`
 4. Branch: `main`
 5. Main file path: `admin_dashboard.py`
 6. App URL: Choose URL (e.g., `pitutur-admin-purwokerto`)

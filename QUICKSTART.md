@@ -83,7 +83,7 @@ streamlit run app.py
 ## 📁 File Structure
 
 ```
-bi-chatbot/
+pitutur-wicara/
 ├── app.py                          # Chatbot utama
 ├── admin_dashboard.py              # Admin dashboard (JALANKAN INI!)
 ├── migrate_knowledge.py            # Migration script (sudah dijalankan)

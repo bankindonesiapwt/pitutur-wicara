@@ -145,7 +145,7 @@ git push origin --force --all
 If you discover a security vulnerability:
 1. **DO NOT** create a public GitHub issue
 2. Contact repository owner directly via:
-   - GitHub: [@send0moka](https://github.com/send0moka)
+   - GitHub: [@bankindonesiapwt](https://github.com/bankindonesiapwt)
    - Email: [contact admin for email]
 3. Include:
    - Description of the vulnerability
@@ -215,7 +215,7 @@ If you discover a security vulnerability:
 
 ## 📞 Security Contacts
 
-- **Repository Owner:** [@send0moka](https://github.com/send0moka)
+- **Repository Owner:** [@bankindonesiapwt](https://github.com/bankindonesiapwt)
 - **Security Issues:** Report via private channels only
 
 ---

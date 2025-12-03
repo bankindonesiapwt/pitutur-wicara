@@ -66,8 +66,8 @@
 
 1. **Clone repository**
 ```bash
-git clone https://github.com/send0moka/bi-chatbot.git
-cd bi-chatbot
+git clone https://github.com/bankindonesiapwt/pitutur-wicara.git
+cd pitutur-wicara
 ```
 
 2. **Install dependencies**
@@ -199,7 +199,7 @@ keyword_weight = 0.3     # hybrid search
 ## 📊 Struktur Project
 
 ```
-bi-chatbot/
+pitutur-wicara/
 │
 ├── app.py                          # Main chatbot application (660 lines)
 ├── admin_dashboard.py              # Admin interface (450+ lines)
@@ -399,9 +399,9 @@ MIT License - see [LICENSE](LICENSE) for details
 
 ## 👥 Team
 
-**Developed by:** send0moka  
+**Developed by:** Bank Indonesia Purwokerto  
 **Organization:** Bank Indonesia - KPw Purwokerto  
-**Contact:** [GitHub](https://github.com/send0moka)
+**Contact:** [GitHub](https://github.com/bankindonesiapwt)
 
 ---
 

@@ -110,7 +110,7 @@ Setiap kali Anda update knowledge base di admin dashboard, perubahan otomatis te
 ## 📁 Struktur File
 
 ```
-bi-chatbot/
+pitutur-wicara/
 ├── app.py                          # Main chatbot application
 ├── admin_dashboard.py              # Admin dashboard for KB management
 ├── requirements.txt                # Python dependencies

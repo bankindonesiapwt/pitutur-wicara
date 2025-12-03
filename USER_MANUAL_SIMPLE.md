@@ -13,7 +13,7 @@
 ## 👤 UNTUK PENGGUNA UMUM
 
 ### 🌐 Link Chatbot
-**Klik di sini:** https://bichatbot-jehian.streamlit.app
+**Klik di sini:** https://pitutur-wicara.streamlit.app
 
 ### 📝 Cara Pakai (3 Langkah Mudah!)
 
@@ -64,7 +64,7 @@
 ## 🔧 UNTUK ADMIN/PENGELOLA
 
 ### 🌐 Link Admin Dashboard
-**Klik di sini:** https://bichatbot-jehian-adm.streamlit.app
+**Klik di sini:** https://pitutur-wicara-adm.streamlit.app
 
 ### 🔐 Login
 - **Password:** Hubungi admin untuk mendapatkan password
@@ -140,7 +140,7 @@
 ## 📞 Kontak Bantuan
 
 Kalau ada masalah atau pertanyaan:
-- 💬 Chat developer: [GitHub @send0moka](https://github.com/send0moka)
+- 💬 Chat developer: [GitHub @bankindonesiapwt](https://github.com/bankindonesiapwt)
 - 📧 Email: (masukkan email kontak di sini)
 - 📱 WhatsApp: (masukkan nomor WA admin di sini)
 
@@ -166,8 +166,8 @@ Kalau ada masalah atau pertanyaan:
 
 ## 🎉 Selamat Mencoba!
 
-**Link Chatbot:** https://bichatbot-jehian.streamlit.app  
-**Link Admin:** https://bichatbot-jehian-adm.streamlit.app
+**Link Chatbot:** https://pitutur-wicara.streamlit.app  
+**Link Admin:** https://pitutur-wicara-adm.streamlit.app
 
 Ada pertanyaan? Jangan ragu untuk bertanya! 😊
 
