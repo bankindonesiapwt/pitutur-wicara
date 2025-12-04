@@ -3,6 +3,8 @@ import json
 import os
 import re
 from datetime import datetime
+
+# Force reload: 2025-12-04 15:50
 from PyPDF2 import PdfReader
 import requests
 import numpy as np
