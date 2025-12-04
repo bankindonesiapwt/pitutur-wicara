@@ -162,18 +162,6 @@ def save_knowledge_base(kb_data, commit_message=""):
         st.info("ℹ️ Changes saved locally. Add GITHUB_TOKEN to Streamlit Secrets to enable auto-push to GitHub.")
     
     return version_data["version"]
-        
-        # Push to remote
-        subprocess.run(['git', 'push', 'origin', 'main'], 
-                      capture_output=True, timeout=30)
-        
-        st.success("✅ Changes saved and pushed to GitHub!")
-    except subprocess.TimeoutExpired:
-        st.warning("⚠️ Git push timeout - changes saved locally but not pushed to GitHub")
-    except subprocess.CalledProcessError:
-        st.info("ℹ️ Changes saved locally (Git auto-push not available in this environment)")
-    except Exception as e:
-        st.warning(f"⚠️ Changes saved locally, but Git push failed: {str(e)}")
     
     return version_data["version"]
 
